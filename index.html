@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Fb-auto-like by jokoprastiyo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Fb-auto-like</h1>
+      <h2 class="project-tagline">Robot automatis like</h2>
+      <a href="https://github.com/jokoprastiyo/fb-auto-like" class="btn">View on GitHub</a>
+      <a href="https://github.com/jokoprastiyo/fb-auto-like/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jokoprastiyo/fb-auto-like/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>&lt;?php
+/**</p>
+
+<ul>
+<li>Xemifolio functions and definitions
+*</li>
+<li>
+<a href="https://github.com/package" class="user-mention">@package</a> Xemifolio
+<em>/
+/</em>*</li>
+<li>Set the content width based on the theme's design and stylesheet.
+<em>/
+if ( ! isset( $content_width ) ) {
+$content_width = 640; /</em> pixels */
+}</li>
+</ul>
+
+<p>if ( ! function_exists( 'xemifolio_setup' ) ) :
+/**</p>
+
+<ul>
+<li>Sets up theme defaults and registers support for various WordPress features.
+*</li>
+<li>Note that this function is hooked into the after_setup_theme hook, which</li>
+<li>runs before the init hook. The init hook is too late for some features, such</li>
+<li>
+<p>as indicating support for post thumbnails.
+*/
+function xemifolio_setup() {</p>
+
+<p>/*</p>
+
+<ul>
+<li>Make theme available for translation.</li>
+<li>Translations can be filed in the /languages/ directory.</li>
+<li>If you're building a theme based on Xemifolio, use a find and replace</li>
+<li>to change 'xemifolio' to the name of your theme in all the template files
+*/
+load_theme_textdomain( 'xemifolio', get_template_directory() . '/languages' );</li>
+</ul>
+
+<p>// Add default posts and comments RSS feed links to head.
+add_theme_support( 'automatic-feed-links' );
+          // The title tag, only works on WordPress 4.1 or later
+          add_theme_support( 'title-tag' );</p>
+
+<p>// Add stylesheet for the WYSIWYG editor
+add_editor_style();
+/*</p>
+
+<ul>
+<li>Enable support for Post Thumbnails on posts and pages.
+*</li>
+<li>
+<a href="https://github.com/link" class="user-mention">@link</a> <a href="http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails">http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails</a>
+*/
+add_theme_support( 'post-thumbnails' );</li>
+</ul>
+
+<p>// This theme uses wp_nav_menu() in one location.
+register_nav_menus( array(
+    'primary' =&gt; __( 'Primary Menu', 'xemifolio' ),
+    'top-menu' =&gt; __( 'Top Menu', 'xemifolio' )
+) );</p>
+
+<p>// Enable support for Post Formats.
+//add_theme_support( 'post-formats', array( 'aside', 'image', 'video', 'quote', 'link' ) );</p>
+
+<p>// Custom backgrounds support
+$defaults_bg = array(
+    'default-color'            =&gt; 'ffffff',
+    'default-image'             =&gt; '',
+    'wp-head-callback'       =&gt; 'xemifolio_custom_background_cb',
+    'admin_head_callback'     =&gt; '',
+    'admin_preview_callback' =&gt; ''
+);
+add_theme_support ( 'custom-background', apply_filters( 'xemifolio_custom_background_args', $defaults_bg ) );</p>
+
+<p>// Custom header support
+$defaults_hd = array(
+    'default-text-color'            =&gt; '',
+    'default-image'           =&gt; '',
+    'upload'                    =&gt; true,
+    'wp-head-callback'       =&gt; 'xemifolio_header_style',
+    'admin_head_callback'     =&gt; 'xemifolio_admin_header_style',
+    'admin_preview_callback' =&gt; 'xemifolio_admin_header_img'
+);
+add_theme_support ( 'custom-header', apply_filters( 'xemifolio_custom_header_args', $defaults_hd ) );</p>
+
+<p>// Enable support for HTML5 markup.
+add_theme_support( 'html5', array(
+    'comment-list',
+    'search-form',
+    'comment-form',
+    'gallery',
+    'caption',
+) );
+}
+endif; // xemifolio_setup
+add_action( 'after_setup_theme', 'xemifolio_setup' );
+/* Function custom background callback*/</p>
+</li>
+</ul>
+
+<p>function xemifolio_custom_background_cb() {
+    // Get the background image.
+    $image_bg = get_background_image();
+    // If there's an image, just call the normal WordPress callback. We won't do anything here.
+    if ( !empty( $image_bg ) ) {
+        _custom_background_cb();
+        return;
+    // Get the background color.
+    $color_bg = get_background_color();
+    // If no background color, return.
+        if ( empty( $color_bg ) )
+        return;
+    // Use 'background' instead of 'background-color'.
+    $style_bg = "background: {color};";
+?&gt;</p>
+
+body { &lt;?php echo trim( $style_bg ); ?&gt; }
+
+<pre><code>&lt;?php }
+</code></pre>
+
+<p>}</p>
+
+<p>/* Fuction custom header callback */</p>
+
+<p>if ( ! function_exists( 'xemifolio_header_style' ) ) :
+/**</p>
+
+<ul>
+<li>Styles the header image and text displayed on the blog
+*</li>
+<li>
+<a href="https://github.com/see" class="user-mention">@see</a> xemifolio_custom_header_setup().
+<em>/
+function xemifolio_header_style() {
+$header_text_color = get_header_textcolor();
+// If no custom options for text are set, let's bail
+// get_header_textcolor() options: HEADER_TEXTCOLOR is default, hide text (returns 'blank') or any hex value
+if ( HEADER_TEXTCOLOR == $header_text_color ) {
+    return;
+}
+// If we get this far, we have custom styles. Let's do this.
+?&gt;
+
+&amp;lt;?php
+    // Has the text been hidden?
+    if ( &amp;#39;blank&amp;#39; == $header_text_color ) :
+?&amp;gt;
+    .site-branding {
+        position: absolute;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+&amp;lt;?php
+    // If the user has set a custom color for the text use that
+    else :
+?&amp;gt;
+    .site-title {
+        color: #&amp;lt;?php echo $header_text_color; ?&amp;gt;;
+    }
+&amp;lt;?php endif; ?&amp;gt;
+
+&lt;?php
+}
+endif; // xemifolio_header_style
+if ( ! function_exists( 'xemifolio_admin_header_style' ) ) :
+/</em>*</li>
+<li>Styles the header image displayed on the Appearance &gt; Header admin panel.
+*</li>
+<li>
+<a href="https://github.com/see" class="user-mention">@see</a> xemifolio_custom_header_setup().
+<em>/
+function xemifolio_admin_header_style() {
+?&gt;
+
+    .appearance_page_custom-header #headimg {
+        border: none;
+    }
+    #headimg {
+        padding: 20px;
+        background: #fff;
+        font-size: 1.375em;
+        text-align: center;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #headimg h1,
+    #desc {
+    }
+    #headimg h1 {
+        margin: 0 0 10px;
+        font-family: &amp;quot;Source Sans Pro&amp;quot;, sans-serif;
+        font-size: 3.6em;
+        line-height: 1.1;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    #headimg h1 a {
+        text-decoration: none;
+    }
+    #desc {
+        color: #b1b2b3 !important;
+        font-family: &amp;quot;PT Serif&amp;quot;, serif;
+        font-size: 0.73em;
+        line-height: 1.5;
+        font-weight: normal;
+        font-style: italic;
+    }
+    #headimg img {
+        display: block;
+        margin: 0 auto 20px auto;
+    }
+    #headimg img   h1 {
+        margin-top: -5px;
+    }
+
+&lt;?php
+}
+endif; // xemifolio_admin_header_style
+if ( ! function_exists( 'xemifolio_admin_header_image' ) ) :
+/</em>*</li>
+<li>Custom header image markup displayed on the Appearance &gt; Header admin panel.
+*</li>
+<li>
+<a href="https://github.com/see" class="user-mention">@see</a> xemifolio_custom_header_setup().
+<em>/
+function xemifolio_admin_header_image() {
+$style = sprintf( ' style="color:#%s;"', get_header_textcolor() );
+?&gt;
+<div id="headimg">
+    &lt;?php if ( get_header_image() ) : ?&gt;
+        <img src="&lt;?php%20header_image();%20?&gt;%22%20alt=%22%22&gt;%0A%20%20%20%20&lt;?php%20endif;%20?&gt;%0A%20%20%20%20&lt;h1%20class="><a id="name"> onclick="return false;" href="&lt;?php echo esc_url( home_url( '/' ) ); ?&gt;"&gt;&lt;?php bloginfo( 'name' ); ?&gt;</a>
+    <div id="desc">&lt;?php bloginfo( 'description' ); ?&gt;</div>
+</div>
+&lt;?php
+}
+endif;
+/</em>*</li>
+<li>Register widget area.
+*</li>
+<li>
+<p><a href="https://github.com/link" class="user-mention">@link</a> <a href="http://codex.wordpress.org/Function_Reference/register_sidebar">http://codex.wordpress.org/Function_Reference/register_sidebar</a>
+*/
+function xemifolio_widgets_init() {
+register_sidebar( array(
+    'name'          =&gt; __( 'Main Sidebar', 'xemifolio' ),
+    'id'            =&gt; 'main-sidebar',
+    'description'   =&gt; '',
+    'before_widget' =&gt; ' ',
+    'after_widget'  =&gt; ' ',
+    'before_title'  =&gt; '</p>
+<h2>
+<a id="----after_title----" class="anchor" href="#----after_title----" aria-hidden="true"><span class="octicon octicon-link"></span></a>',
+    'after_title'   =&gt; '</h2>',
+));
+
+<p>register_sidebar( array(
+    'name'          =&gt; __( 'Footer Widget', 'xemifolio' ),
+    'id'            =&gt; 'footer-widget',
+    'description'   =&gt; '',
+    'before_widget' =&gt; '</p>
+<div id="%1$s">',
+    'after_widget'  =&gt; '</div>',
+    'before_title'  =&gt; '<h2>
+<a id="----after_title-----1" class="anchor" href="#----after_title-----1" aria-hidden="true"><span class="octicon octicon-link"></span></a>',
+    'after_title'   =&gt; '</h2>',
+));
+
+<p>register_sidebar( array(
+    'name'          =&gt; __( 'Top Widget', 'xemifolio' ),
+    'id'            =&gt; 'top-widget',
+    'description'   =&gt; '',
+    'before_widget' =&gt; ' ',
+    'after_widget'  =&gt; ' ',
+    'before_title'  =&gt; '</p>
+<h2>
+<a id="----after_title-----2" class="anchor" href="#----after_title-----2" aria-hidden="true"><span class="octicon octicon-link"></span></a>',
+    'after_title'   =&gt; '</h2>',
+));
+
+<p>}
+add_action( 'widgets_init', 'xemifolio_widgets_init' );</p>
+</li>
+</ul>
+
+<p>/**</p>
+
+<ul>
+<li>
+<p>Enqueue Style and Script.
+<em>/
+function xemifolio_fonts_url() {
+$fonts_url = '';
+$fonts     = array();
+$subsets   = 'latin,latin-ext';
+/</em> translators: If there are characters in your language that are not supported by Lobster, translate this to 'off'. Do not translate into your own language. <em>/
+if ( 'off' !== _x( 'on', 'Lobster font: on or off', 'xemifolio' ) ) {
+    $fonts[] = 'Lobster:400';
+}
+/</em> translators: If there are characters in your language that are not supported by Roboto, translate this to 'off'. Do not translate into your own language. */
+if ( 'off' !== _x( 'on', 'Roboto font: on or off', 'xemifolio' ) ) {
+    $fonts[] = 'Roboto:300,400,700,900';
+}</p>
+
+<p>if ( $fonts ) {
+    $fonts_url = add_query_arg( array(
+        'family' =&gt; urlencode( implode( '|', $fonts ) ),
+        'subset' =&gt; urlencode( 'latin,latin-ext' ),
+    ), '//fonts.googleapis.com/css' );
+}
+return $fonts_url;
+}</p>
+</li>
+</ul>
+
+<p>function xemifolio_scripts(){
+        wp_enqueue_style( 'xemifolio_bootstrap_css', get_template_directory_uri() . '/inc/bootstrap/bootstrap.css');
+        wp_enqueue_style( 'xemifolio_fontawesome_css', get_template_directory_uri() . '/inc/css/font-awesome.css');
+    wp_enqueue_style( 'xemifolio-style', get_template_directory_uri() . '/style.css' );
+    wp_enqueue_style('xemifolio_google_fonts', xemifolio_fonts_url(), array(), null);
+    wp_enqueue_style( 'xemifolio_top_menu', get_template_directory_uri() . '/top-menu.css' );</p>
+
+<pre><code>wp_enqueue_script( 'xemifolio_dropdown_js', get_template_directory_uri() . '/inc/js/dropdown.js', array('jquery') );
+wp_enqueue_script( 'xemifolio_bootstrap-min_js', get_template_directory_uri() . '/inc/bootstrap/bootstrap.min.js', array(), '20150615', true );
+wp_enqueue_script('xemifolio_touchdown', get_template_directory_uri() . '/inc/js/touchdown.js', array('jquery'));
+wp_enqueue_script('xemifolio_scriptsmin', get_template_directory_uri() . '/inc/js/scripts.min.js', array('jquery'));
+wp_enqueue_script( 'xemifolio_skip_link', get_template_directory_uri() . '/inc/js/skip-link-focus-fix.js', array( 'jquery' ), '', true );
+
+if ( is_singular() &amp;&amp; comments_open() &amp;&amp; get_option( 'thread_comments' ) ) {
+    wp_enqueue_script( 'comment-reply' );
+}
+</code></pre>
+
+<p>}
+add_action( 'wp_enqueue_scripts', 'xemifolio_scripts' );</p>
+
+<p>/* Excerpt config */</p>
+
+<p>function xemifolio_excerptlength_default($length) {
+    return 40;
+}</p>
+
+<p>function xemifolio_excerptlength_themes($length) {
+    return 60;
+}</p>
+
+<p>function xemifolio_excerptmore($more)
+{
+    return '... </p><div><a href="'%20.%20get_permalink(%20get_the_ID()%20)%20.%20'">Continue reading →</a></div>';
+}
+    add_filter('excerpt_length', 'xemifolio_excerptlength_default');
+    add_filter('excerpt_length', 'xemifolio_excerptlength_themes');
+    add_filter('excerpt_more', 'xemifolio_excerptmore');
+
+<p>/* Favicon */</p>
+
+<p>if ( ! function_exists( 'has_site_icon' ) || ! has_site_icon() ) {</p>
+
+<p>if ( ! function_exists( 'xemifolio_favicon_icon' ) ) :</p>
+
+<p>function xemifolio_favicon_icon() {</p>
+
+<pre><code>$favicon_icon = get_option( 'xemifolio_upload_favicon_icon' );
+if ( get_option( 'xemifolio_display_favicon_icon' ) == 1 ) :
+if ( ! get_option( 'xemifolio_upload_favicon_icon' ) ) {
+
+    $favicon_icon = get_template_directory_uri() . '/images/favicon.ico';
+}
+</code></pre>
+
+<p>?&gt;
+        </p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jokoprastiyo/fb-auto-like">Fb-auto-like</a> is maintained by <a href="https://github.com/jokoprastiyo">jokoprastiyo</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
